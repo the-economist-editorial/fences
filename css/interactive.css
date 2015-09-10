@@ -14,3 +14,8 @@
   fill : transparent;
   stroke : var(--grey-10);
 }
+
+.fences {
+  fill : transparent;
+  stroke : var(--red-1);
+}

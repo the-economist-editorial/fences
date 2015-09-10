@@ -39,7 +39,7 @@ class Chart extends ChartContainer {
   render() {
     var mapProps = {
       height : this.props.height,
-      projection : d3.geo.stereographic(),
+      projection : d3.geo.mercator(),
       storeBindings : [
         [interactive.stores['geodata'], function(store) {
           this.setState({
@@ -60,7 +60,7 @@ class Chart extends ChartContainer {
 }
 
 interactive.action('orderLayers', [
-  'coastline', 'countries', 'borders'
+  'coastline', 'countries', 'borders', 'fences'
 ]);
 
 var props = {
@@ -79,7 +79,4 @@ function fetchTopojson(name, file, featureGroup) {
 fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
 fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
 fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_land');
-
-// d3.json('./data/countries.json', function(err, data) {
-//   interactive.action('addLayer', 'countries', topojson.feature(data, data.objects.ne_50m_admin_0_countries).features);
-// });
+fetchTopojson('fences', './data/fences.json', 'fences-out');
