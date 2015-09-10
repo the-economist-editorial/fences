@@ -75,7 +75,7 @@ interactive.action('orderLayers', [
   'coastline', 'countries', 'borders', 'fences'
 ]);
 interactive.action('setProjection',
-  d3.geo.winkel3().scale(120)
+  d3.geo.winkel3().scale(110)
 );
 interactive.action('setLayerAttrs', {
   'countries' : {

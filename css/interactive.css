@@ -1,16 +1,25 @@
 /* project-specific CSS belongs here */
 
 .countries {
-  fill : var(--grey-9);
-  &[data-iso="USA"] {
-    fill: red;
+  fill : #e3e3e3;
+}
+
+.schengen {
+  [data-iso=FRA], [data-iso=DEU], [data-iso=NLD], [data-iso=BEL],
+  [data-iso=PRT], [data-iso=ESP], [data-iso=LUX], [data-iso=ITA],
+  [data-iso=NOR], [data-iso=SWE], [data-iso=DNK], [data-iso=FIN],
+  [data-iso=CHE], [data-iso=EST], [data-iso=LVA], [data-iso=LTU],
+  [data-iso=POL], [data-iso=CZE], [data-iso=SVK], [data-iso=HUN],
+  [data-iso=AUT], [data-iso=ISL], [data-iso=SVN], [data-iso=GRC],
+  [data-iso=MLT], [data-iso=LIE] {
+    fill : var(--blue-2);
   }
 }
 
 .coastline {
   fill : transparent;
-  stroke-width: 2;
-  stroke : var(--blue-1);
+  stroke-width: 1;
+  stroke : var(--blue-4);
 }
 
 .borders {
