@@ -42,14 +42,16 @@ module.exports = function(grunt) {
         }
       }
     },
-    cssnext : {
+    postcss : {
       options : {
-        sourcemap : true,
-        import : true,
-        // map : {
-        //   inline : false,
-        //   annotation : 'dist/index.css.map'
-        // }
+        map : {
+          inline : false,
+          annotation : 'built/'
+        },
+        processors : [
+          require('cssnext')(),
+          require('postcss-nested')()
+        ]
       },
       dist : {
         files : {
@@ -64,7 +66,7 @@ module.exports = function(grunt) {
       },
       css : {
         files : ['css/**/*.css'],
-        tasks : ['cssnext'],
+        tasks : ['postcss'],
         options : {
           livereload : livereloadPort
         }
@@ -95,7 +97,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-cssnext');
+  grunt.loadNpmTasks('grunt-postcss');
 
-  grunt.registerTask('default', ['webpack:build-dev', 'cssnext', 'connect', 'watch']);
+  grunt.registerTask('default', ['webpack:build-dev', 'postcss', 'connect', 'watch']);
 };

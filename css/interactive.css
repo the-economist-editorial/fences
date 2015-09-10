@@ -2,6 +2,9 @@
 
 .countries {
   fill : var(--grey-9);
+  &[data-iso="USA"] {
+    fill: red;
+  }
 }
 
 .coastline {
