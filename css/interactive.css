@@ -1,7 +1,7 @@
 /* project-specific CSS belongs here */
 
 .countries {
-  fill : var(--grey-8);
+  fill : var(--grey-9);
 }
 
 .coastline {
@@ -12,7 +12,7 @@
 
 .borders {
   fill : transparent;
-  stroke : var(--grey-10);
+  stroke : white;
 }
 
 .fences {

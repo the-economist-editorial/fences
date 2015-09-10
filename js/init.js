@@ -13,6 +13,7 @@ import ChartContainer from './chart-container.js';
 import D3Map from './d3map.js';
 
 import Interactive from './interactive.js';
+// just needs to be here...
 import dummy from '../node_modules/d3-geo-projection/d3.geo.projection.js';
 
 Interactive.createStore('meta', {
@@ -35,6 +36,9 @@ Interactive.createStore('geodata', {
   },
   setProjection : function(projection) {
     this.set('projection', projection);
+  },
+  setLayerAttrs : function(layerAttrs) {
+    this.set('layerAttrs', layerAttrs);
   }
 });
 
@@ -43,6 +47,7 @@ class Chart extends ChartContainer {
   render() {
     var mapProps = {
       height : this.props.height,
+      duration : null,
       projection : d3.geo.winkel3()
         .scale(120).translate([595/2,this.props.height/2]),
       storeBindings : [
@@ -50,7 +55,8 @@ class Chart extends ChartContainer {
           this.setState({
             layers : store.get('layers'),
             layerOrder : store.get('layerOrder'),
-            projection : store.get('projection')
+            projection : store.get('projection'),
+            layerAttrs : store.get('layerAttrs')
           });
         }]
       ]
@@ -71,6 +77,11 @@ interactive.action('orderLayers', [
 interactive.action('setProjection',
   d3.geo.winkel3().scale(120)
 );
+interactive.action('setLayerAttrs', {
+  'countries' : {
+    'data-iso' : function(d) { return d.properties.iso_a3; }
+  }
+});
 
 var props = {
   height : 350
@@ -84,6 +95,8 @@ function fetchTopojson(name, file, featureGroup) {
     interactive.action('addLayer', name, topojson.feature(data, data.objects[featureGroup]).features);
   });
 }
+
+window.interactive = interactive;
 
 fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
 fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
