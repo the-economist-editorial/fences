@@ -1,0 +1,29 @@
+:root {
+  --header-block-top-offset: 15px;
+  --header-block-left-offset : 16px;
+}
+
+.chart-container {
+  width: 595px;
+}
+
+.interactive-header {
+  border-top: 2px solid var(--red-1);
+  padding-left: var(--header-block-left-offset);
+  padding-top: var(--header-block-top-offset);
+}
+.interactive-header:before {
+  content: ' ';
+  width: 10px;
+  height: 30px;
+  display: block;
+  position: absolute;
+  margin-top: -var(--header-block-top-offset);
+  margin-left: -var(--header-block-left-offset);
+  background-color: var(--red-1);
+}
+
+.chart-container .axis .tick > line {
+  stroke: black;
+  stroke-weight: 1;
+}
