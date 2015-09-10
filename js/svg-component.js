@@ -22,4 +22,14 @@ export default class SVGComponent extends InteractiveComponent {
   render() {
     return(<div>This function should be overwritten.</div>);
   }
+  componentDidMount() {
+    super.componentDidMount.apply(this, arguments);
+    this.d3render();
+  }
+  componentDidUpdate() {
+    this.d3render();
+  }
+  d3render() {
+    // extend this function
+  }
 }

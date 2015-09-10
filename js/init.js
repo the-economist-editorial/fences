@@ -2,15 +2,15 @@
 
 import d3 from 'd3';
 import React from 'react';
-import { parseNumerics } from './utilities.js';
+import Im from 'immutable';
+import topojson from 'topojson';
 
 import colours from './econ_colours.js';
 
 import Header from './header.js';
-import Slider from './slider.js';
 import ChartContainer from './chart-container.js';
-import BarChart from './bar-chart.js';
-import USStateMap from './us-states-map.js';
+
+import D3Map from './d3map.js';
 
 import Interactive from './interactive.js';
 
@@ -20,32 +20,29 @@ Interactive.createStore('meta', {
   }
 });
 
-class Chart extends ChartContainer {
-  // constructor() {
-  //   super();
-  // }
-  render() {
-    var barChartProps = {
-      data : this.props.data,
-      xScale : d3.scale.linear().domain([0,5]),
-      yScale : d3.scale.linear().domain([0,150]),
-      height : this.props.height
-    };
+Interactive.createStore('geodata', {
+  addLayer : function(layerName, data) {
+    let layers = this.get('layers');
+    if(!layers) { layers = Im.Map(); }
 
+    layers = layers.set(layerName, data);
+
+    this.set('layers', layers);
+  },
+  orderLayers : function(layerOrder) {
+    this.set('layerOrder', layerOrder);
+  }
+});
+
+class Chart extends ChartContainer {
+  render() {
     var mapProps = {
       height : this.props.height,
-      colourFn : function(v) {
-        return v > 10 ? colours.red[0] : colours.blue[1];
-      }
-    }
-
-    var sliderProps = {
-      name : 'year',
-      scale : d3.scale.linear().domain([1980,2010]),
       storeBindings : [
-        [interactive.stores['meta'], function(store) {
+        [interactive.stores['geodata'], function(store) {
           this.setState({
-            value : store.get('slider-year')
+            layers : store.get('layers'),
+            layerOrder : store.get('layerOrder')
           });
         }]
       ]
@@ -53,9 +50,8 @@ class Chart extends ChartContainer {
 
     return(
       <div className='chart-container'>
-        <Header title="Oh geez" subtitle="Seriously now"/>
-        <Slider {...sliderProps} />
-        <USStateMap {...mapProps} />
+        <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
+        <D3Map {...mapProps} />
       </div>
     );
   }
@@ -64,9 +60,9 @@ var props = {
   height : 320
 };
 
-var chart = React.render(<Chart/>, document.getElementById('interactive'));
+var chart = React.render(<Chart {...props} />, document.getElementById('interactive'));
 
-d3.json('data/bar-data.json', (err, data) => {
-  props.data = parseNumerics(data.data);
-  chart = React.render(<Chart {...props} />, document.getElementById('interactive'));
+d3.json('./data/countries.json', function(err, data) {
+  // console.log(data);
+  interactive.action('addLayer', 'countries', topojson.feature(data, data.objects.ne_50m_admin_0_countries).features);
 });
