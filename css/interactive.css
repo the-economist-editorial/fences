@@ -29,5 +29,5 @@
 
 .fences {
   fill : transparent;
-  stroke : var(--red-1);
+  /*stroke : var(--red-3);*/
 }

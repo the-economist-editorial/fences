@@ -80,6 +80,13 @@ interactive.action('setProjection',
 interactive.action('setLayerAttrs', {
   'countries' : {
     'data-iso' : function(d) { return d.properties.iso_a3; }
+  },
+  'fences' : {
+    'data-immigration' : function(d) { return !!d.properties.cause_imm; },
+    'data-security' : function(d) { return !!d.properties.cause_secu; },
+    stroke : function(d) {
+      return 'green';
+    }
   }
 });
 
@@ -91,7 +98,7 @@ var chart = React.render(<Chart {...props} />, document.getElementById('interact
 
 function fetchTopojson(name, file, featureGroup) {
   d3.json(file, function(err, data) {
-    console.log(data.objects);
+    // console.log(data.objects);
     interactive.action('addLayer', name, topojson.feature(data, data.objects[featureGroup]).features);
   });
 }
