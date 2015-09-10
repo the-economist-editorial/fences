@@ -1,3 +1,16 @@
 /* project-specific CSS belongs here */
 
-/* intentionally empty */
+.countries {
+  fill : var(--grey-5);
+}
+
+.coastline {
+  fill : transparent;
+  stroke-width: 2;
+  stroke : var(--blue-1);
+}
+
+.borders {
+  fill : transparent;
+  stroke : var(--grey-10);
+}

@@ -23,21 +23,23 @@ Interactive.createStore('meta', {
 Interactive.createStore('geodata', {
   addLayer : function(layerName, data) {
     let layers = this.get('layers');
-    if(!layers) { layers = Im.Map(); }
+    if(!layers) { layers = Im.OrderedMap(); }
 
     layers = layers.set(layerName, data);
 
     this.set('layers', layers);
   },
   orderLayers : function(layerOrder) {
-    this.set('layerOrder', layerOrder);
+    this.set('layerOrder', Im.OrderedSet(layerOrder));
   }
 });
+
 
 class Chart extends ChartContainer {
   render() {
     var mapProps = {
       height : this.props.height,
+      projection : d3.geo.stereographic(),
       storeBindings : [
         [interactive.stores['geodata'], function(store) {
           this.setState({
@@ -56,13 +58,28 @@ class Chart extends ChartContainer {
     );
   }
 }
+
+interactive.action('orderLayers', [
+  'coastline', 'countries', 'borders'
+]);
+
 var props = {
-  height : 320
+  height : 350
 };
 
 var chart = React.render(<Chart {...props} />, document.getElementById('interactive'));
 
-d3.json('./data/countries.json', function(err, data) {
-  // console.log(data);
-  interactive.action('addLayer', 'countries', topojson.feature(data, data.objects.ne_50m_admin_0_countries).features);
-});
+function fetchTopojson(name, file, featureGroup) {
+  d3.json(file, function(err, data) {
+    console.log(data.objects);
+    interactive.action('addLayer', name, topojson.feature(data, data.objects[featureGroup]).features);
+  });
+}
+
+fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
+fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
+fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_land');
+
+// d3.json('./data/countries.json', function(err, data) {
+//   interactive.action('addLayer', 'countries', topojson.feature(data, data.objects.ne_50m_admin_0_countries).features);
+// });

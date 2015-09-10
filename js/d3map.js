@@ -41,7 +41,13 @@ export default class D3Map extends SVGComponent {
     };
   }
   render() {
-    var layers = this.state.layers.map((layer, name) => {
+    var layers = this.state.layers;
+    if(this.state.layerOrder) {
+      layers = this.state.layerOrder.toOrderedMap().map(function(k) {
+        return layers.has(k) ? layers.get(k) : null;
+      });
+    }
+    var layerElements = layers.filter(v => v).map((layer, name) => {
       var props = {
         elementClass : name,
         projection : this.props.projection,
@@ -53,7 +59,7 @@ export default class D3Map extends SVGComponent {
 
 
     return(<svg height={this.props.height} width="595">
-      {layers}
+      {layerElements}
     </svg>)
   }
 }
