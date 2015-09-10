@@ -13,6 +13,7 @@ import ChartContainer from './chart-container.js';
 import D3Map from './d3map.js';
 
 import Interactive from './interactive.js';
+import dummy from '../node_modules/d3-geo-projection/d3.geo.projection.js';
 
 Interactive.createStore('meta', {
   'sliderValue' : function(key, value) {
@@ -31,6 +32,9 @@ Interactive.createStore('geodata', {
   },
   orderLayers : function(layerOrder) {
     this.set('layerOrder', Im.OrderedSet(layerOrder));
+  },
+  setProjection : function(projection) {
+    this.set('projection', projection);
   }
 });
 
@@ -39,12 +43,14 @@ class Chart extends ChartContainer {
   render() {
     var mapProps = {
       height : this.props.height,
-      projection : d3.geo.mercator(),
+      projection : d3.geo.winkel3()
+        .scale(120).translate([595/2,this.props.height/2]),
       storeBindings : [
         [interactive.stores['geodata'], function(store) {
           this.setState({
             layers : store.get('layers'),
-            layerOrder : store.get('layerOrder')
+            layerOrder : store.get('layerOrder'),
+            projection : store.get('projection')
           });
         }]
       ]
@@ -62,6 +68,9 @@ class Chart extends ChartContainer {
 interactive.action('orderLayers', [
   'coastline', 'countries', 'borders', 'fences'
 ]);
+interactive.action('setProjection',
+  d3.geo.winkel3().scale(120)
+);
 
 var props = {
   height : 350
