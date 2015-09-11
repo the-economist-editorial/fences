@@ -4,7 +4,7 @@
   fill : #e3e3e3;
 }
 
-.schengen {
+[data-zoom='europe'] {
   [data-iso=FRA], [data-iso=DEU], [data-iso=NLD], [data-iso=BEL],
   [data-iso=PRT], [data-iso=ESP], [data-iso=LUX], [data-iso=ITA],
   [data-iso=NOR], [data-iso=SWE], [data-iso=DNK], [data-iso=FIN],
@@ -12,22 +12,43 @@
   [data-iso=POL], [data-iso=CZE], [data-iso=SVK], [data-iso=HUN],
   [data-iso=AUT], [data-iso=ISL], [data-iso=SVN], [data-iso=GRC],
   [data-iso=MLT], [data-iso=LIE] {
-    fill : var(--blue-2);
+    fill : var(--blue-5);
+  }
+}
+
+[data-zoom=russia] {
+  [data-iso=RUS],
+  [data-iso=EST], [data-iso=LVA], [data-iso=LTU],
+  [data-iso=BLR], [data-iso=UKR], [data-iso=MDA],
+  [data-iso=GEO], [data-iso=ARM], [data-iso=AZE],
+  [data-iso=KAZ], [data-iso=UZB], [data-iso=TKM], [data-iso=KGZ], [data-iso=TJK] {
+    fill : var(--red-3);
+  }
+}
+
+[data-zoom=middleEast] {
+  [data-iso=EGY], [data-iso=TUN], [data-iso=LBY],
+  [data-iso=YEM], [data-iso=SYR], [data-iso=BHR] {
+    fill : var(--green-3);
   }
 }
 
 .coastline {
   fill : transparent;
-  stroke-width: 1;
-  stroke : var(--blue-4);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke : color(var(--blue-4) alpha(-50%));
 }
 
 .borders {
   fill : transparent;
+  stroke-linejoin: round;
   stroke : white;
 }
 
 .fences {
   fill : transparent;
+  stroke-linejoin: round;
+  stroke-width: 2;
   /*stroke : var(--red-3);*/
 }

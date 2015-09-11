@@ -8,6 +8,7 @@ import topojson from 'topojson';
 import colours from './econ_colours.js';
 
 import Header from './header.js';
+import ToggleBar from './toggle-bar.js';
 import ChartContainer from './chart-container.js';
 
 import D3Map from './d3map.js';
@@ -16,9 +17,17 @@ import Interactive from './interactive.js';
 // just needs to be here...
 import dummy from '../node_modules/d3-geo-projection/d3.geo.projection.js';
 
+var projections = window.projections = {
+  world : d3.geo.winkel3().scale(160).center([0,20]),
+  europe : d3.geo.albers().scale(450).rotate([-10,-5]),
+  middleEast : d3.geo.albers().scale(650).rotate([-34,10]),
+  russia : d3.geo.albers().scale(1200).rotate([-24,-15])
+};
+
 Interactive.createStore('meta', {
-  'sliderValue' : function(key, value) {
-    this.set('slider-' + key, value);
+  setToggle : function(key, value) {
+    this.set(`toggle-${key}`, value);
+    interactive.action('setProjection', projections[value]);
   }
 });
 
@@ -42,14 +51,14 @@ Interactive.createStore('geodata', {
   }
 });
 
+interactive.action('setToggle', 'world');
 
 class Chart extends ChartContainer {
   render() {
     var mapProps = {
       height : this.props.height,
       duration : null,
-      projection : d3.geo.winkel3()
-        .scale(120).translate([595/2,this.props.height/2]),
+      // projection : projections[interactive.stores['meta'].get('toggle-zoom')],
       storeBindings : [
         [interactive.stores['geodata'], function(store) {
           this.setState({
@@ -58,13 +67,30 @@ class Chart extends ChartContainer {
             projection : store.get('projection'),
             layerAttrs : store.get('layerAttrs')
           });
+        }],
+        [interactive.stores['meta'], function(store) {
+          this.setState({
+            zoom : store.get('toggle-zoom')
+          });
         }]
       ]
-    }
+    };
+
+    var toggleProps = {
+      name : 'zoom',
+      activeKey : interactive.stores['meta'].get('toggle-zoom'),
+      items : Im.fromJS([
+        { title : 'World', value : 'world' },
+        { title : 'Europe', value : 'europe' },
+        { title : 'Middle East', value : 'middleEast' },
+        { title : 'Russian Border', value : 'russia' }
+      ])
+    };
 
     return(
       <div className='chart-container'>
         <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
+        <ToggleBar {...toggleProps} />
         <D3Map {...mapProps} />
       </div>
     );
@@ -74,9 +100,7 @@ class Chart extends ChartContainer {
 interactive.action('orderLayers', [
   'coastline', 'countries', 'borders', 'fences'
 ]);
-interactive.action('setProjection',
-  d3.geo.winkel3().scale(110)
-);
+interactive.action('setProjection', projections.world);
 interactive.action('setLayerAttrs', {
   'countries' : {
     'data-iso' : function(d) { return d.properties.iso_a3; }
