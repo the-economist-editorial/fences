@@ -72,7 +72,7 @@ export default class D3Map extends SVGComponent {
     });
 
 
-    return(<svg height={this.props.height} width="595" data-zoom={this.state.zoom}>
+    return(<svg height={this.props.height} width="595" data-status={this.state.status}>
       {layerElements}
     </svg>)
   }

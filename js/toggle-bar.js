@@ -34,7 +34,6 @@ export default class ToggleBar extends InteractiveComponent {
   }
   get itemElements () {
     return this.props.items.map((item) => {
-      console.log(item.get('value'), this.state.activeKey);
       item = item.merge({
         key : item.get('value'),
         action : (v) => { interactive.action('setToggle', this.props.name, v) },

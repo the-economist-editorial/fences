@@ -29,6 +29,8 @@ Interactive.createStore('meta', {
     this.set(`toggle-${key}`, value);
     interactive.action('setProjection', projections[value]);
   }
+}, {
+  'toggle-zoom' : 'world'
 });
 
 Interactive.createStore('geodata', {
@@ -50,8 +52,8 @@ Interactive.createStore('geodata', {
     this.set('layerAttrs', layerAttrs);
   }
 });
-
-interactive.action('setToggle', 'world');
+//
+// interactive.action('setToggle', 'world');
 
 class Chart extends ChartContainer {
   render() {
@@ -70,7 +72,7 @@ class Chart extends ChartContainer {
         }],
         [interactive.stores['meta'], function(store) {
           this.setState({
-            zoom : store.get('toggle-zoom')
+            status : store.get('toggle-zoom')
           });
         }]
       ]

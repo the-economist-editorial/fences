@@ -5,7 +5,7 @@ let EventEmitter = events.EventEmitter;
 // the idea of a store is that it'll listen to a dispatcher and react
 // to events on it with whatever thing its creator decides
 export class Store extends EventEmitter {
-  constructor(dispatcher, callbacks, ...args) {
+  constructor(dispatcher, callbacks, initialValues, ...args) {
     super(...args);
 
     this._dispatcher = dispatcher;
@@ -17,7 +17,7 @@ export class Store extends EventEmitter {
       }));
     }
 
-    this.values = Im.Map();
+    this.values = Im.Map(initialValues);
   }
   get callbacks() {
     return this._callbacks;
@@ -59,8 +59,8 @@ export class InteractiveManager {
   }
 
   // this overwrites stores that exist
-  createStore(key, opts) {
-    this._stores = this._stores.set(key, new Store(this, opts));
+  createStore(key, opts, initialValues = {}) {
+    this._stores = this._stores.set(key, new Store(this, opts, initialValues));
   }
 }
 
