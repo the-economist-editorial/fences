@@ -13,7 +13,7 @@ import ChartContainer from './chart-container.js';
 
 import D3Map from './d3map.js';
 
-import Interactive from './interactive.js';
+import interactive from './interactive.js';
 // just needs to be here...
 import dummy from '../node_modules/d3-geo-projection/d3.geo.projection.js';
 
@@ -24,7 +24,7 @@ var projections = window.projections = {
   russia : d3.geo.albers().scale(1200).rotate([-24,-15])
 };
 
-Interactive.createStore('meta', {
+interactive.createStore('meta', {
   setToggle : function(key, value) {
     this.set(`toggle-${key}`, value);
     interactive.action('setProjection', projections[value]);
@@ -33,7 +33,7 @@ Interactive.createStore('meta', {
   'toggle-zoom' : 'world'
 });
 
-Interactive.createStore('geodata', {
+interactive.createStore('geodata', {
   addLayer : function(layerName, data) {
     let layers = this.get('layers');
     if(!layers) { layers = Im.OrderedMap(); }
@@ -52,8 +52,12 @@ Interactive.createStore('geodata', {
     this.set('layerAttrs', layerAttrs);
   }
 });
-//
-// interactive.action('setToggle', 'world');
+
+interactive.createStore('data', {
+  addData : function(dataName, data) {
+    this.set(dataName, data);
+  }
+});
 
 class Chart extends ChartContainer {
   render() {
@@ -135,3 +139,7 @@ fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
 fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
 fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_land');
 fetchTopojson('fences', './data/fences.json', 'fences-out');
+
+d3.csv('./data/walls-data.csv', function(error, data) {
+  interactive.action('addData', 'fenceData', data);
+});
