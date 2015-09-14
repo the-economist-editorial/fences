@@ -49,6 +49,5 @@
 .fences {
   fill : transparent;
   stroke-linejoin: round;
-  stroke-width: 2;
-  /*stroke : var(--red-3);*/
+  stroke-linecap: round;
 }

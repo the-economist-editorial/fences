@@ -166,6 +166,23 @@ class Chart extends ChartContainer {
   }
 }
 
+function assureDataJoin(d) {
+  var props = d.properties;
+  if(!d.dataCombined) {
+    var fenceData = interactive.stores['data'].get('fenceData').filter(
+      (f) => {
+        return d.properties.builder === f.get('builder') && d.properties.target === f.get('target')
+      }
+    ).get(0);
+    for(let k of ['planned?', 'construction?', 'completed?']) {
+      props[k] = fenceData.get(k);
+    }
+
+    d.dataCombined = true;
+  }
+  return d;
+}
+
 interactive.action('orderLayers', [
   'coastline', 'countries', 'borders', 'fences'
 ]);
@@ -211,8 +228,20 @@ interactive.action('setLayerAttrs', {
     'data-immigration' : function(d) { return !!d.properties.cause_imm; },
     'data-security' : function(d) { return !!d.properties.cause_secu; },
     stroke : function(d) {
+      d = assureDataJoin(d);
       if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 'red'; };
-      return 'green';
+      return 'black';
+    },
+    'stroke-dasharray' : function(d) {
+      d = assureDataJoin(d);
+      if(d.properties['planned?']) { return '3 6'; }
+      if(d.properties['construction?']) { return '4 4'; }
+      if(d.properties['completed?']) { return '1 0'; }
+    },
+    'stroke-width' : function(d) {
+      d = assureDataJoin(d);
+      if(d.properties['planned?']) { return 1; }
+      return 2;
     }
   }
 });
