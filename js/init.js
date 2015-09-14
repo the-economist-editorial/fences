@@ -6,6 +6,7 @@ import d3 from 'd3';
 import React from 'react';
 import Im from 'immutable';
 import topojson from 'topojson';
+import chroma from 'chroma-js';
 
 import colours from './econ_colours.js';
 import countries from './countries.js';
@@ -45,6 +46,28 @@ var soviet = Im.Set([
 var arabSpring = Im.Set([
   'EGY', 'TUN', 'LBY', 'YEM', 'SYR', 'BHR'
 ]);
+
+window.chroma = chroma;
+window.colours = colours;
+// var immigrationColours = chroma.hsl(355.771, 1, 0.4451); // red
+// var securityColour = chroma.hsl(175.939, 1, 0.4451); // aquamarine
+var immigrationColour = 37.724;
+var securityColour = 186.789;
+
+var startChroma = 92.904;
+var startLightness = 47.461;
+
+var endChroma = 33.969;
+var endLightness = 73.097;
+
+var immigrationScale = chroma.scale([
+  chroma.hcl(immigrationColour, startChroma, startLightness).hex(),
+  chroma.hcl(immigrationColour, endChroma, endLightness).hex()
+]).mode('hcl').domain([1950, 2000, 2005, 2009, 2011, 2013, 2014, 2015]);
+var securityScale = chroma.scale([
+  chroma.hcl(securityColour, startChroma, startLightness).hex(),
+  chroma.hcl(securityColour, endChroma, endLightness).hex()
+]).mode('hcl').domain([1950, 2000, 2005, 2009, 2011, 2013, 2014, 2015]);
 
 interactive.createStore('meta', {
   setToggle : function(key, value) {
@@ -174,7 +197,11 @@ function assureDataJoin(d) {
         return d.properties.builder === f.get('builder') && d.properties.target === f.get('target')
       }
     ).get(0);
-    for(let k of ['planned?', 'construction?', 'completed?']) {
+    for(let k of [
+      'planned?', 'construction?', 'completed?',
+      'announced_year', 'begun_year', 'completed_year',
+      'immigration_yes', 'security_yes', 'border_yes'
+    ]) {
       props[k] = fenceData.get(k);
     }
 
@@ -230,12 +257,15 @@ interactive.action('setLayerAttrs', {
     stroke : function(d) {
       d = assureDataJoin(d);
       if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 'red'; };
+      var targetYear = d.properties['planned?'] ? d.properties.announced_year : d.properties.begun_year;
+      if(d.properties.immigration_yes === 'TRUE') { return immigrationScale(+targetYear).hex(); }
+      if(d.properties.security_yes === 'TRUE') { return securityScale(+targetYear).hex(); }
       return 'black';
     },
     'stroke-dasharray' : function(d) {
       d = assureDataJoin(d);
-      if(d.properties['planned?']) { return '3 6'; }
-      if(d.properties['construction?']) { return '4 4'; }
+      if(d.properties['planned?']) { return '2 3'; }
+      if(d.properties['construction?']) { return '2 2'; }
       if(d.properties['completed?']) { return '1 0'; }
     },
     'stroke-width' : function(d) {

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "babel": "^5.8.23",
+    "chroma-js": "^1.1.1",
     "d3": "^3.5.6",
     "d3-geo-projection": "^0.2.15",
     "immutable": "^3.7.5",
