@@ -59,15 +59,30 @@ var startLightness = 47.461;
 
 var endChroma = 33.969;
 var endLightness = 73.097;
+var colourDomain = [2000, 2005, 2009, 2011, 2013, 2014, 2015];
 
 var immigrationScale = chroma.scale([
-  chroma.hcl(immigrationColour, startChroma, startLightness).hex(),
-  chroma.hcl(immigrationColour, endChroma, endLightness).hex()
-]).mode('hcl').domain([1950, 2000, 2005, 2009, 2011, 2013, 2014, 2015]);
+  chroma.hcl(immigrationColour, endChroma, endLightness).hex(),
+  chroma.hcl(immigrationColour, startChroma, startLightness).hex()
+]).mode('hcl').domain(colourDomain);
 var securityScale = chroma.scale([
-  chroma.hcl(securityColour, startChroma, startLightness).hex(),
-  chroma.hcl(securityColour, endChroma, endLightness).hex()
-]).mode('hcl').domain([1950, 2000, 2005, 2009, 2011, 2013, 2014, 2015]);
+  chroma.hcl(securityColour, endChroma, endLightness).hex(),
+  chroma.hcl(securityColour, startChroma, startLightness).hex()
+]).mode('hcl').domain(colourDomain);
+var otherScale = chroma.scale([
+  chroma.hcl(0,0, endLightness),
+  chroma.hcl(0, 0, startLightness)
+]).mode('hcl').domain(colourDomain);
+
+
+function generateMonoScale(h, c, startL, endL) {
+  return chroma.scale([
+    chroma.hcl(h, c, startL), chroma.hcl(h, c, endL)
+  ]).mode('hcl');
+}
+
+var blues = generateMonoScale(238, 8, 75, 90);
+var highlightBlues = generateMonoScale(210, 15, 50, 80);
 
 interactive.createStore('meta', {
   setToggle : function(key, value) {
@@ -227,28 +242,28 @@ interactive.action('setLayerAttrs', {
       switch(zoomMode) {
         case 'europe':
           if(schengen.has(iso_a3)) {
-            if(focused) { return colours.blue[2]; }
-            if(builder) { return colours.blue[4]; }
-            return colours.blue[5];
+            if(focused) { return highlightBlues(0); }
+            if(builder) { return highlightBlues(0.7); }
+            return highlightBlues(1);
           }
           break;
         case 'russia':
           if(soviet.includes(iso_a3)) {
-            if(focused) { return colours.red[1]; }
-            if(builder) { return colours.red[2]; }
-            return colours.red[3];
+            if(focused) { return highlightBlues(0); }
+            if(builder) { return highlightBlues(0.7); }
+            return highlightBlues(1);
           }
           break;
         case 'middleEast':
           if(arabSpring.includes(iso_a3)) {
-            if(focused) { return colours.green[1]; }
-            if(builder) { return colours.green[2]; }
-            return colours.green[3];
+            if(focused) { return highlightBlues(0); }
+            if(builder) { return highlightBlues(0.7); }
+            return highlightBlues(1);
           }
       }
-      if(focused) { return colours.grey[5]; }
-      if(builder) { return colours.grey[8]; }
-      return colours.grey[9];
+      if(focused) { return blues(0) }
+      if(builder) { return blues(0.7) }
+      return blues(1);
     }
   },
   'fences' : {
@@ -256,21 +271,21 @@ interactive.action('setLayerAttrs', {
     'data-security' : function(d) { return !!d.properties.cause_secu; },
     stroke : function(d) {
       d = assureDataJoin(d);
-      if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 'red'; };
       var targetYear = d.properties['planned?'] ? d.properties.announced_year : d.properties.begun_year;
-      if(d.properties.immigration_yes === 'TRUE') { return immigrationScale(+targetYear).hex(); }
-      if(d.properties.security_yes === 'TRUE') { return securityScale(+targetYear).hex(); }
-      return 'black';
+      if(d.properties.immigration_yes === 'TRUE') { return colours.red[0]; }
+      if(d.properties.security_yes === 'TRUE') { return colours.aquamarine[0]; }
+      return colours.grey[4];
     },
     'stroke-dasharray' : function(d) {
       d = assureDataJoin(d);
-      if(d.properties['planned?']) { return '2 3'; }
-      if(d.properties['construction?']) { return '2 2'; }
+      if(d.properties['planned?']) { return '2 2'; }
+      if(d.properties['construction?']) { return '2 4'; }
       if(d.properties['completed?']) { return '1 0'; }
     },
     'stroke-width' : function(d) {
       d = assureDataJoin(d);
-      if(d.properties['planned?']) { return 1; }
+      if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 3.5; };
+      // if(d.properties['planned?']) { return 1; }
       return 2;
     }
   }
@@ -292,7 +307,7 @@ function fetchTopojson(name, file, featureGroup) {
 window.interactive = interactive;
 
 fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
-fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
+// fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
 fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_land');
 fetchTopojson('fences', './data/fences.json', 'fences-out');
 
