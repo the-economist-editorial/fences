@@ -86,8 +86,9 @@ interactive.createStore('geodata', {
         var iso_a3 = d.properties.iso_a3;
         if(!interactive.stores['data'].get('fenceData-builders').has(iso_a3)) {
           interactive.action('setFocusCountry', 'NONE');
+        } else {
+          interactive.action('setFocusCountry', iso_a3);
         }
-        interactive.action('setFocusCountry', iso_a3);
         // var fences = interactive.stores['data'].get('fenceData')
         //   .filter((n) => { return iso_a3 === n.get('builder'); });
         // console.log('hello', fences.toJS());

@@ -21,11 +21,12 @@ export default class BordersTable extends InteractiveComponent {
     }
   }
   render() {
-    if(!this.state.focusCountry) {
+    if(!this.state.focusCountry || this.state.focusCountry === 'NONE') {
       return (<div></div>);
     }
 
     var country = countries[this.state.focusCountry];
+
     var fences = interactive.stores['data'].get('fenceData')
       .filter(d => d.get('builder') === this.state.focusCountry)
       .map((d) => {
