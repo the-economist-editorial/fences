@@ -60,7 +60,7 @@ var startLightness = 47.461;
 var endChroma = 33.969;
 var endLightness = 73.097;
 var colourDomain = [2000, 2005, 2009, 2011, 2013, 2014, 2015];
-// 
+//
 // var immigrationScale = chroma.scale([
 //   chroma.hcl(immigrationColour, endChroma, endLightness).hex(),
 //   chroma.hcl(immigrationColour, startChroma, startLightness).hex()

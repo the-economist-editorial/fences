@@ -11,10 +11,7 @@ module.exports = {
   },
   module : {
     loaders : [
-      {
-        test : /\.(js|jsx)$/,
-        loader : 'babel?optional[]=runtime'
-      }
+      { test : /\.(js|jsx)$/, loader : 'babel-loader' }
     ]
   },
   resolve : {
