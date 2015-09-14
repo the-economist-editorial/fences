@@ -50,6 +50,17 @@ interactive.createStore('geodata', {
   },
   setLayerAttrs : function(layerAttrs) {
     this.set('layerAttrs', layerAttrs);
+  },
+  setLayerHandlers : function(layerHandlers) {
+    this.set('layerHandlers', layerHandlers);
+  }
+}, {
+  layerHandlers : {
+    'countries' : {
+      'click' : function(d) {
+        console.log('hello', d.properties.iso_a3);
+      }
+    }
   }
 });
 
@@ -71,7 +82,8 @@ class Chart extends ChartContainer {
             layers : store.get('layers'),
             layerOrder : store.get('layerOrder'),
             projection : store.get('projection'),
-            layerAttrs : store.get('layerAttrs')
+            layerAttrs : store.get('layerAttrs'),
+            layerHandlers : store.get('layerHandlers')
           });
         }],
         [interactive.stores['meta'], function(store) {

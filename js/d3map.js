@@ -24,12 +24,12 @@ class MapLayer extends SVGComponent {
       .classed(this.props.elementClass, true);
     join.exit().remove();
 
-    if(this.props.attrs) {
-      join.attr(this.props.attrs);
-    }
+    join.attr(this.props.attrs);
+    join.on(this.props.handlers);
 
     var alter = this.props.duration ? join.transition().duration(this.props.duration) : join;
     alter.attr('d', pathFn);
+
   }
 }
 
@@ -40,7 +40,8 @@ export default class D3Map extends SVGComponent {
       layers : [],
       layerOrder : null,
       projection : props.projection,
-      layerAttrs : {}
+      layerAttrs : {},
+      layerHandlers : {}
     }
   }
   static get defaultProps() {
@@ -65,7 +66,8 @@ export default class D3Map extends SVGComponent {
         duration : this.props.duration,
         projection : projection,
         data : layer,
-        attrs : this.state.layerAttrs[name] || {}
+        attrs : this.state.layerAttrs[name] || {},
+        handlers : this.state.layerHandlers[name] || {}
       };
 
       return (<MapLayer {...props} />);
