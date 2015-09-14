@@ -60,19 +60,19 @@ var startLightness = 47.461;
 var endChroma = 33.969;
 var endLightness = 73.097;
 var colourDomain = [2000, 2005, 2009, 2011, 2013, 2014, 2015];
-
-var immigrationScale = chroma.scale([
-  chroma.hcl(immigrationColour, endChroma, endLightness).hex(),
-  chroma.hcl(immigrationColour, startChroma, startLightness).hex()
-]).mode('hcl').domain(colourDomain);
-var securityScale = chroma.scale([
-  chroma.hcl(securityColour, endChroma, endLightness).hex(),
-  chroma.hcl(securityColour, startChroma, startLightness).hex()
-]).mode('hcl').domain(colourDomain);
-var otherScale = chroma.scale([
-  chroma.hcl(0,0, endLightness),
-  chroma.hcl(0, 0, startLightness)
-]).mode('hcl').domain(colourDomain);
+// 
+// var immigrationScale = chroma.scale([
+//   chroma.hcl(immigrationColour, endChroma, endLightness).hex(),
+//   chroma.hcl(immigrationColour, startChroma, startLightness).hex()
+// ]).mode('hcl').domain(colourDomain);
+// var securityScale = chroma.scale([
+//   chroma.hcl(securityColour, endChroma, endLightness).hex(),
+//   chroma.hcl(securityColour, startChroma, startLightness).hex()
+// ]).mode('hcl').domain(colourDomain);
+// var otherScale = chroma.scale([
+//   chroma.hcl(0,0, endLightness),
+//   chroma.hcl(0, 0, startLightness)
+// ]).mode('hcl').domain(colourDomain);
 
 
 function generateMonoScale(h, c, startL, endL) {
@@ -81,7 +81,7 @@ function generateMonoScale(h, c, startL, endL) {
   ]).mode('hcl');
 }
 
-var blues = generateMonoScale(238, 8, 75, 90);
+var blues = generateMonoScale(238, 8, 60, 90);
 var highlightBlues = generateMonoScale(210, 15, 50, 80);
 
 interactive.createStore('meta', {
