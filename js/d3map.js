@@ -29,7 +29,6 @@ class MapLayer extends SVGComponent {
 
     var alter = this.props.duration ? join.transition().duration(this.props.duration) : join;
     alter.attr('d', pathFn);
-
   }
 }
 

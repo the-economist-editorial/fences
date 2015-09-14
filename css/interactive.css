@@ -1,10 +1,10 @@
 /* project-specific CSS belongs here */
 
-.countries {
+/*.countries {
   fill : #e3e3e3;
-}
+}*/
 
-[data-status='europe'] {
+/*[data-status='europe'] {
   [data-iso=FRA], [data-iso=DEU], [data-iso=NLD], [data-iso=BEL],
   [data-iso=PRT], [data-iso=ESP], [data-iso=LUX], [data-iso=ITA],
   [data-iso=NOR], [data-iso=SWE], [data-iso=DNK], [data-iso=FIN],
@@ -14,7 +14,7 @@
   [data-iso=MLT], [data-iso=LIE] {
     fill : var(--blue-5);
   }
-}
+}*/
 
 [data-status=russia] {
   [data-iso=RUS],
@@ -22,14 +22,14 @@
   [data-iso=BLR], [data-iso=UKR], [data-iso=MDA],
   [data-iso=GEO], [data-iso=ARM], [data-iso=AZE],
   [data-iso=KAZ], [data-iso=UZB], [data-iso=TKM], [data-iso=KGZ], [data-iso=TJK] {
-    fill : var(--red-3);
+    /*fill : var(--red-3);*/
   }
 }
 
 [data-status=middleEast] {
   [data-iso=EGY], [data-iso=TUN], [data-iso=LBY],
   [data-iso=YEM], [data-iso=SYR], [data-iso=BHR] {
-    fill : var(--green-3);
+    /*fill : var(--green-3);*/
   }
 }
 

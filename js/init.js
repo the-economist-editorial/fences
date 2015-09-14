@@ -6,10 +6,12 @@ import Im from 'immutable';
 import topojson from 'topojson';
 
 import colours from './econ_colours.js';
+import countries from './countries.js';
 
 import Header from './header.js';
 import ToggleBar from './toggle-bar.js';
 import ChartContainer from './chart-container.js';
+import BordersTable from './borders-table.js';
 
 import D3Map from './d3map.js';
 
@@ -24,10 +26,31 @@ var projections = window.projections = {
   russia : d3.geo.albers().scale(1200).rotate([-24,-15])
 };
 
+var schengen = Im.Set([
+  'FRA', 'DEU', 'NLD', 'BEL', 'PRT', 'ESP', 'LUX', 'ITA',
+  'NOR', 'SWE', 'DNK', 'FIN', 'CHE', 'EST', 'LVA', 'LTU',
+  'POL', 'CZE', 'SVK', 'HUN', 'AUT', 'ISL', 'SVN', 'GRC',
+  'MLT', 'LIE'
+]);
+
+var soviet = Im.Set([
+  'RUS',
+  'EST', 'LVA', 'LTU',
+  'BLR', 'UKR', 'MDA',
+  'GEO', 'ARM', 'AZE',
+  'KAZ', 'UZB', 'TKM', 'KGZ', 'TJK']);
+
+var arabSpring = Im.Set([
+  'EGY', 'TUN', 'LBY', 'YEM', 'SYR', 'BHR'
+]);
+
 interactive.createStore('meta', {
   setToggle : function(key, value) {
     this.set(`toggle-${key}`, value);
     interactive.action('setProjection', projections[value]);
+  },
+  setFocusCountry : function(iso_a3) {
+    this.set('focusCountry', iso_a3);
   }
 }, {
   'toggle-zoom' : 'world'
@@ -58,7 +81,14 @@ interactive.createStore('geodata', {
   layerHandlers : {
     'countries' : {
       'click' : function(d) {
-        console.log('hello', d.properties.iso_a3);
+        var iso_a3 = d.properties.iso_a3;
+        if(!interactive.stores['data'].get('fenceData-builders').has(iso_a3)) {
+          interactive.action('setFocusCountry', 'NONE');
+        }
+        interactive.action('setFocusCountry', iso_a3);
+        // var fences = interactive.stores['data'].get('fenceData')
+        //   .filter((n) => { return iso_a3 === n.get('builder'); });
+        // console.log('hello', fences.toJS());
       }
     }
   }
@@ -67,6 +97,7 @@ interactive.createStore('geodata', {
 interactive.createStore('data', {
   addData : function(dataName, data) {
     this.set(dataName, data);
+    this.set(`${dataName}-builders`, data.map(d => d.get('builder')).toSet());
   }
 });
 
@@ -88,7 +119,8 @@ class Chart extends ChartContainer {
         }],
         [interactive.stores['meta'], function(store) {
           this.setState({
-            status : store.get('toggle-zoom')
+            status : store.get('toggle-zoom'),
+            focusCountry : store.get('focusCountry')
           });
         }]
       ]
@@ -105,11 +137,27 @@ class Chart extends ChartContainer {
       ])
     };
 
+    var tableProps = {
+      storeBindings : [
+        [interactive.stores['data'], function(store) {
+          this.setState({
+            fenceData : store.get('fenceData')
+          });
+        }],
+        [interactive.stores['meta'], function(store) {
+          this.setState({
+            focusCountry : store.get('focusCountry')
+          });
+        }]
+      ]
+    };
+
     return(
       <div className='chart-container'>
         <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
         <ToggleBar {...toggleProps} />
         <D3Map {...mapProps} />
+        <BordersTable {...tableProps} />
       </div>
     );
   }
@@ -121,12 +169,46 @@ interactive.action('orderLayers', [
 interactive.action('setProjection', projections.world);
 interactive.action('setLayerAttrs', {
   'countries' : {
-    'data-iso' : function(d) { return d.properties.iso_a3; }
+    'data-iso' : function(d) { return d.properties.iso_a3; },
+    'data-focus' : function(d) { return d.properties.iso_a3 === interactive.stores['meta'].get('focusCountry'); },
+    fill : function(d) {
+      var iso_a3 = d.properties.iso_a3;
+      var zoomMode = interactive.stores['meta'].get('toggle-zoom');
+      var focused = iso_a3 === interactive.stores['meta'].get('focusCountry');
+      var builder = interactive.stores['data'].get('fenceData-builders').has(iso_a3);
+
+      switch(zoomMode) {
+        case 'europe':
+          if(schengen.has(iso_a3)) {
+            if(focused) { return colours.blue[2]; }
+            if(builder) { return colours.blue[4]; }
+            return colours.blue[5];
+          }
+          break;
+        case 'russia':
+          if(soviet.includes(iso_a3)) {
+            if(focused) { return colours.red[1]; }
+            if(builder) { return colours.red[2]; }
+            return colours.red[3];
+          }
+          break;
+        case 'middleEast':
+          if(arabSpring.includes(iso_a3)) {
+            if(focused) { return colours.green[1]; }
+            if(builder) { return colours.green[2]; }
+            return colours.green[3];
+          }
+      }
+      if(focused) { return colours.grey[5]; }
+      if(builder) { return colours.grey[8]; }
+      return colours.grey[9];
+    }
   },
   'fences' : {
     'data-immigration' : function(d) { return !!d.properties.cause_imm; },
     'data-security' : function(d) { return !!d.properties.cause_secu; },
     stroke : function(d) {
+      if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 'red'; };
       return 'green';
     }
   }
@@ -153,5 +235,5 @@ fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_l
 fetchTopojson('fences', './data/fences.json', 'fences-out');
 
 d3.csv('./data/walls-data.csv', function(error, data) {
-  interactive.action('addData', 'fenceData', data);
+  interactive.action('addData', 'fenceData', Im.fromJS(data));
 });
