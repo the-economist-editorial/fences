@@ -10,7 +10,7 @@ function formatPurpose(d) {
   return core_purposes.map((p) => {
     // console.log(p, d.get(`${p}_yes`));
     return d.get(`${p}_yes`) === 'TRUE' ? p : null
-  }).delete(null).toArray().join(', ');
+  }).delete(null).toArray().join(', ') || 'other';
 }
 
 export default class BordersTable extends InteractiveComponent {

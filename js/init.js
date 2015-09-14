@@ -1,5 +1,7 @@
 'use strict';
 
+import 'babel/polyfill';
+
 import d3 from 'd3';
 import React from 'react';
 import Im from 'immutable';
