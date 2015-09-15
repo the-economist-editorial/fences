@@ -25,18 +25,6 @@ class LineGroup extends InteractiveComponent {
 }
 
 export default class LineLegend extends InteractiveComponent {
-  // constructor(props) {
-  //   super(...arguments);
-  //   this.state = {
-  //     colours: props.colours
-  //     // colours : interactive.stores['meta'].get(`${props.name}-colours`)
-  //   };
-  // }
-  // static get defaultProps() {
-  //   return {
-  //     name : 'main'
-  //   };
-  // }
   render() {
     var colours = this.props.colours.map((c) => {
       return(<LineGroup {...c} />);

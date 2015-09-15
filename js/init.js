@@ -213,7 +213,7 @@ class Chart extends ChartContainer {
         { title : 'World', value : 'world' },
         { title : 'Europe', value : 'europe' },
         { title : 'Middle East', value : 'middleEast' },
-        { title : 'Russian Border', value : 'russia' }
+        { title : 'Russian border', value : 'russia' }
       ])
     };
 
@@ -274,7 +274,10 @@ class Chart extends ChartContainer {
 function assureDataJoin(d) {
   var props = d.properties;
   if(!d.dataCombined) {
-    var fenceData = interactive.stores['data'].get('fenceData').filter(
+    var fenceData = interactive.stores['data'].get('fenceData');
+    if(!fenceData) { return d; }
+
+    fenceData = fenceData.filter(
       (f) => {
         return d.properties.builder === f.get('builder') && d.properties.target === f.get('target')
       }
