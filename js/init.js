@@ -68,7 +68,7 @@ function generateMonoScale(h, c, startL, endL) {
 }
 
 var blues = generateMonoScale(238, 8, 60, 90);
-var highlightBlues = generateMonoScale(80, 25, 50, 80);
+var highlightBlues = generateMonoScale(80, 40, 50, 80);
 
 var rawColours = Im.fromJS([
   {
@@ -233,7 +233,7 @@ class Chart extends ChartContainer {
           colours : [colours.red[0]]
         },{
           label : 'planned',
-          colours : [colours.aquamarine[1]]
+          colours : [colours.aquamarine[0]]
         }
       ]
     };
@@ -319,7 +319,7 @@ interactive.action('setLayerAttrs', {
       // if(d.properties.immigration_yes === 'TRUE') { return colours.red[0]; }
       // if(d.properties.security_yes === 'TRUE') { return colours.aquamarine[0]; }
       // return colours.grey[4];
-      if(d.properties['planned?'] ) { return colours.aquamarine[1]; }
+      if(d.properties['planned?'] ) { return colours.aquamarine[0]; }
       if(d.properties['construction?'] || d.properties['completed?']) { return colours.red[0]; }
     },
     // 'stroke-dasharray' : function(d) {
