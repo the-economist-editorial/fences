@@ -13,6 +13,10 @@ function formatPurpose(d) {
   }).delete(null).toArray().join(', ') || 'other';
 }
 
+var importantKeys = Im.Set([
+  'target', 'announced_year', 'begun_year', 'completed_year', 'TEXT'
+]);
+
 export default class BordersTable extends InteractiveComponent {
   constructor() {
     super(...arguments);
@@ -28,36 +32,60 @@ export default class BordersTable extends InteractiveComponent {
     var country = countries[this.state.focusCountry];
 
     var fences = interactive.stores['data'].get('fenceData')
-      .filter(d => d.get('builder') === this.state.focusCountry)
-      .map((d) => {
+      .filter(d => d.get('builder') === this.state.focusCountry);
+
+    var fenceKeys = fences.reduce((memo, value) => {
+      var neededKeys = Im.Set(value.filter(v => !!v).keys()).intersect(importantKeys).toJS();
+      // console.log(memo.union(neededKeys).toJS(), neededKeys);
+      return memo.union(neededKeys);
+    }, Im.Set());
+
+    var fenceElements = fences.map((d) => {
+        var year_items = [];
+        if(fenceKeys.includes('announced_year')) {
+          year_items.push(<td className='announced'>{d.get('announced_year')}</td>);
+        }
+        if(fenceKeys.includes('begun_year')) {
+          year_items.push(<td className='begun'>{d.get('begun_year')}</td>);
+        }
+        if(fenceKeys.includes('completed_year')) {
+          year_items.push(<td className='completed'>{d.get('completed_year')}</td>);
+        }
+        var text_item = fenceKeys.includes('TEXT') ?
+          (<td>{d.get('TEXT')}</td>) : null;
         return (<tr>
           <td>{countries[d.get('target')].name}</td>
-          <td>{d.get('announced_year')}</td>
-          <td>{d.get('begun_year')}</td>
-          <td>{d.get('completed_year')}</td>
+          {year_items}
           <td>{formatPurpose(d)}</td>
-          <td>{d.get('TEXT')}</td>
+          {text_item}
         </tr>)
       });
 
-    return(<div>
+    var yearHeaderItems = [];
+    if(fenceKeys.includes('announced_year')) {
+      yearHeaderItems.push(<th className='announced'>Announced</th>);
+    }
+    if(fenceKeys.includes('begun_year')) {
+      yearHeaderItems.push(<th className='begun'>Begun</th>);
+    }
+    if(fenceKeys.includes('completed_year')) {
+      yearHeaderItems.push(<th className='completed'>Completed</th>);
+    }
+    var textHeaderItem = fenceKeys.includes('TEXT') ?
+      (<th>Notes</th>) : null;
+    return(<div className='border-table-container'>
       <h1>{country.name}</h1>
-      <table>
+      <table className='border-table'>
         <thead>
         <tr>
-          <th rowSpan="2">Target country</th>
-          <th colSpan="3">Year</th>
-          <th rowSpan="2">Purpose</th>
-          <th rowSpan="2">Notes</th>
-        </tr>
-        <tr>
-          <th>announced</th>
-          <th>started</th>
-          <th>completed</th>
+          <th>against</th>
+          {yearHeaderItems}
+          <th>stated reasons</th>
+          {textHeaderItem}
         </tr>
         </thead>
         <tbody>
-          {fences}
+          {fenceElements}
         </tbody>
       </table>
     </div>);
