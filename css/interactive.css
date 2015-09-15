@@ -63,8 +63,11 @@
 .border-table-container {
   h1 {
     font-size: 20px;
+    margin: 0 2px;
   }
   .border-table {
+    width: 100%;
+    font-size: 14px;
     th, td {
       padding: 2px 5px;
     }
