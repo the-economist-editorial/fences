@@ -51,8 +51,6 @@ var arabSpring = Im.Set([
 
 window.chroma = chroma;
 window.colours = colours;
-// var immigrationColours = chroma.hsl(355.771, 1, 0.4451); // red
-// var securityColour = chroma.hsl(175.939, 1, 0.4451); // aquamarine
 var immigrationColour = 37.724;
 var securityColour = 186.789;
 
@@ -62,20 +60,6 @@ var startLightness = 47.461;
 var endChroma = 33.969;
 var endLightness = 73.097;
 var colourDomain = [2000, 2005, 2009, 2011, 2013, 2014, 2015];
-//
-// var immigrationScale = chroma.scale([
-//   chroma.hcl(immigrationColour, endChroma, endLightness).hex(),
-//   chroma.hcl(immigrationColour, startChroma, startLightness).hex()
-// ]).mode('hcl').domain(colourDomain);
-// var securityScale = chroma.scale([
-//   chroma.hcl(securityColour, endChroma, endLightness).hex(),
-//   chroma.hcl(securityColour, startChroma, startLightness).hex()
-// ]).mode('hcl').domain(colourDomain);
-// var otherScale = chroma.scale([
-//   chroma.hcl(0,0, endLightness),
-//   chroma.hcl(0, 0, startLightness)
-// ]).mode('hcl').domain(colourDomain);
-
 
 function generateMonoScale(h, c, startL, endL) {
   return chroma.scale([
@@ -90,15 +74,15 @@ var rawColours = Im.fromJS([
   {
     label : 'Country',
     colours : [
-      { colour : blues(1), label : 'has not built walls' },
       { colour : blues(0.7), label : 'has built walls' },
+      { colour : blues(1), label : 'has not built walls' }
       // { colour : blues(0), label : 'selected' }
     ]
   }
 ]);
 var offColours = Im.fromJS([
-  { colour : highlightBlues(1), label : 'has not built walls' },
   { colour : highlightBlues(0.7), label : 'has built walls' },
+  { colour : highlightBlues(1), label : 'has not built walls' }
   // { colour : highlightBlues(0), label : 'selected' }
 ]);
 function generateColourGroup(title) {
@@ -244,16 +228,14 @@ class Chart extends ChartContainer {
     };
 
     var lineColours = {
+      label : 'Border fences',
       colours : [
         {
-          label : 'immigration',
+          label : 'partially or fully constructed',
           colours : [colours.red[0]]
         },{
-          label : 'security',
+          label : 'planned',
           colours : [colours.aquamarine[0]]
-        },{
-          label : 'other',
-          colours : [colours.grey[4]]
         }
       ]
     };
@@ -335,17 +317,19 @@ interactive.action('setLayerAttrs', {
     'data-security' : function(d) { return !!d.properties.cause_secu; },
     stroke : function(d) {
       d = assureDataJoin(d);
-      var targetYear = d.properties['planned?'] ? d.properties.announced_year : d.properties.begun_year;
-      if(d.properties.immigration_yes === 'TRUE') { return colours.red[0]; }
-      if(d.properties.security_yes === 'TRUE') { return colours.aquamarine[0]; }
-      return colours.grey[4];
+      // var targetYear = d.properties['planned?'] ? d.properties.announced_year : d.properties.begun_year;
+      // if(d.properties.immigration_yes === 'TRUE') { return colours.red[0]; }
+      // if(d.properties.security_yes === 'TRUE') { return colours.aquamarine[0]; }
+      // return colours.grey[4];
+      if(d.properties['planned?'] ) { return colours.aquamarine[0]; }
+      if(d.properties['construction?'] || d.properties['completed?']) { return colours.red[0]; }
     },
-    'stroke-dasharray' : function(d) {
-      d = assureDataJoin(d);
-      if(d.properties['planned?']) { return '2 2'; }
-      if(d.properties['construction?']) { return '2 4'; }
-      if(d.properties['completed?']) { return '1 0'; }
-    },
+    // 'stroke-dasharray' : function(d) {
+    //   d = assureDataJoin(d);
+    //   if(d.properties['planned?']) { return '2 2'; }
+    //   if(d.properties['construction?']) { return '2 4'; }
+    //   if(d.properties['completed?']) { return '1 0'; }
+    // },
     'stroke-width' : function(d) {
       d = assureDataJoin(d);
       if(d.properties.builder === interactive.stores['meta'].get('focusCountry')) { return 3.5; };

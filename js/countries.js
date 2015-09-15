@@ -6397,5 +6397,7 @@ var countries = {
   }
 };
 
+// aliases
+countries.PSX = countries.PSE;
 
 export default countries;

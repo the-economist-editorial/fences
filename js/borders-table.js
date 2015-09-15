@@ -30,7 +30,6 @@ export default class BordersTable extends InteractiveComponent {
     var fences = interactive.stores['data'].get('fenceData')
       .filter(d => d.get('builder') === this.state.focusCountry)
       .map((d) => {
-        // console.log(d.toJS());
         return (<tr>
           <td>{countries[d.get('target')].name}</td>
           <td>{d.get('announced_year')}</td>

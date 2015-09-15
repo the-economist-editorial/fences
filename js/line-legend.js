@@ -29,7 +29,12 @@ export default class LineLegend extends InteractiveComponent {
     var colours = this.props.colours.map((c) => {
       return(<LineGroup {...c} />);
     });
+
+    var groupLabelElement = this.props.label ?
+      (<span className='colour-group-label'>{this.props.label}</span>) : null;
+
     return(<div className='colour-legend'>
+      {groupLabelElement}
       {colours}
     </div>);
   }
