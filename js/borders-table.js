@@ -63,13 +63,13 @@ export default class BordersTable extends InteractiveComponent {
 
     var yearHeaderItems = [];
     if(fenceKeys.includes('announced_year')) {
-      yearHeaderItems.push(<th className='announced'>Announced</th>);
+      yearHeaderItems.push(<th className='announced'>announced</th>);
     }
     if(fenceKeys.includes('begun_year')) {
-      yearHeaderItems.push(<th className='begun'>Begun</th>);
+      yearHeaderItems.push(<th className='begun'>begun</th>);
     }
     if(fenceKeys.includes('completed_year')) {
-      yearHeaderItems.push(<th className='completed'>Completed</th>);
+      yearHeaderItems.push(<th className='completed'>completed</th>);
     }
     var textHeaderItem = fenceKeys.includes('TEXT') ?
       (<th>Notes</th>) : null;

@@ -66,6 +66,8 @@
     margin: 0 2px;
   }
   .border-table {
+    background-color: var(--red-4);
+
     width: 100%;
     font-size: 14px;
     th, td {
@@ -74,6 +76,10 @@
 
     th {
       text-align: left;
+    }
+
+    tr:nth-child(2n) {
+      background-color: var(--red-3);
     }
   }
 }
