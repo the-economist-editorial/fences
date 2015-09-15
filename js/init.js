@@ -244,8 +244,10 @@ class Chart extends ChartContainer {
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
         <LineLegend {...lineColours} />
+        <div className="instruction">Click a country to see the walls and fences it has built</div>
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
+        <div className="source">Sources: Élisabeth Vallet</div>
       </div>
     );
   }

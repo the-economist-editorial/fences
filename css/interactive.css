@@ -44,6 +44,7 @@
   fill : transparent;
   stroke-linejoin: round;
   stroke : white;
+  pointer-events: none;
 }
 
 .fences {
@@ -60,11 +61,18 @@
   }
 }
 
+.instruction {
+  margin: 0 10px;
+  font-style: italic;
+}
+
 .border-table-container {
   h1 {
     font-size: 20px;
     margin: 0 2px;
   }
+  min-height: 260px;
+
   .border-table {
     background-color: var(--red-4);
 
@@ -82,4 +90,8 @@
       background-color: var(--red-3);
     }
   }
+}
+
+.source {
+  background-color: var(--grey-10);
 }

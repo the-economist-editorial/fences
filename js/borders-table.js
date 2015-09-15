@@ -26,7 +26,7 @@ export default class BordersTable extends InteractiveComponent {
   }
   render() {
     if(!this.state.focusCountry || this.state.focusCountry === 'NONE') {
-      return (<div></div>);
+      return (<div className='border-table-container'></div>);
     }
 
     var country = countries[this.state.focusCountry];
@@ -63,13 +63,13 @@ export default class BordersTable extends InteractiveComponent {
 
     var yearHeaderItems = [];
     if(fenceKeys.includes('announced_year')) {
-      yearHeaderItems.push(<th className='announced'>announced</th>);
+      yearHeaderItems.push(<th className='announced'>Announced</th>);
     }
     if(fenceKeys.includes('begun_year')) {
-      yearHeaderItems.push(<th className='begun'>begun</th>);
+      yearHeaderItems.push(<th className='begun'>Begun</th>);
     }
     if(fenceKeys.includes('completed_year')) {
-      yearHeaderItems.push(<th className='completed'>completed</th>);
+      yearHeaderItems.push(<th className='completed'>Completed</th>);
     }
     var textHeaderItem = fenceKeys.includes('TEXT') ?
       (<th>Notes</th>) : null;
@@ -78,9 +78,9 @@ export default class BordersTable extends InteractiveComponent {
       <table className='border-table'>
         <thead>
         <tr>
-          <th>against</th>
+          <th>Against</th>
           {yearHeaderItems}
-          <th>stated reasons</th>
+          <th>Stated reasons</th>
           {textHeaderItem}
         </tr>
         </thead>
