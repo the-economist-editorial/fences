@@ -62,13 +62,17 @@
       margin-right: 1em;
       display: inline-block;
     }
+    .colour-group-label {
+      margin-right: 5px;
+      vertical-align: top;
+    }
     .colour-block {
       display: inline-block;
       width: 16px;
       height: 16px;
     }
     .colour-block-label {
-      margin: 0 5px;
+      margin: 0 10px 0 5px;
       vertical-align: top;
     }
   }

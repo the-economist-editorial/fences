@@ -5,15 +5,28 @@ import InteractiveComponent from './interactive-component.js';
 class ColourGroup extends InteractiveComponent {
   render() {
     var colourBlocks = this.props.colours.map((c) => {
+      var colour, label;
+      if(c.colour && c.label) {
+        colour = c.colour;
+        label = c.label;
+      } else {
+        colour = c;
+      }
       var style = {
-        backgroundColor : c
+        backgroundColor : colour
       };
-      return (<span className='colour-block' style={style}></span>)
+      var labelElement = label ? (<span className='colour-block-label'>{label}</span>) : null;
+      return (<span>
+        <span className='colour-block' style={style}></span>
+        {labelElement}
+      </span>)
     })
 
+    var groupLabelElement = this.props.label ?
+      (<span className='colour-group-label'>{this.props.label}</span>) : null;
     return (<span className='colour-group'>
+      {groupLabelElement}
       {colourBlocks}
-      <span className='colour-block-label'>{this.props.label}</span>
     </span>);
   }
 }

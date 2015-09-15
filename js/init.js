@@ -84,22 +84,22 @@ function generateMonoScale(h, c, startL, endL) {
 }
 
 var blues = generateMonoScale(238, 8, 60, 90);
-var highlightBlues = generateMonoScale(210, 15, 50, 80);
+var highlightBlues = generateMonoScale(80, 25, 50, 80);
 
 var rawColours = Im.fromJS([
   {
-    label : 'Countries',
+    label : 'Country',
     colours : [
-      blues(0),
-      blues(0.7),
-      blues(1)
+      { colour : blues(1), label : 'has not built walls' },
+      { colour : blues(0.7), label : 'has built walls' },
+      // { colour : blues(0), label : 'selected' }
     ]
   }
 ]);
 var offColours = Im.fromJS([
-  highlightBlues(0),
-  highlightBlues(0.7),
-  highlightBlues(1)
+  { colour : highlightBlues(1), label : 'has not built walls' },
+  { colour : highlightBlues(0.7), label : 'has built walls' },
+  // { colour : highlightBlues(0), label : 'selected' }
 ]);
 function generateColourGroup(title) {
   return rawColours.push(Im.fromJS({
@@ -119,13 +119,11 @@ interactive.createStore('meta', {
           this.set('country-colours', rawColours);
           break;
         case 'europe':
+        case 'russia':
+        case 'middleEast':
           this.set('country-colours', generateColourGroup('Schengen area'));
           break;
-        case 'russia':
-          this.set('country-colours', generateColourGroup('Former Soviet Union'));
-          break;
-        case 'middleEast':
-          this.set('country-colours', generateColourGroup('Recent instability'));
+          // this.set('country-colours', rawColours);
           break;
       }
     }
@@ -169,9 +167,6 @@ interactive.createStore('geodata', {
         } else {
           interactive.action('setFocusCountry', iso_a3);
         }
-        // var fences = interactive.stores['data'].get('fenceData')
-        //   .filter((n) => { return iso_a3 === n.get('builder'); });
-        // console.log('hello', fences.toJS());
       }
     }
   }
@@ -313,25 +308,19 @@ interactive.action('setLayerAttrs', {
 
       switch(zoomMode) {
         case 'europe':
+        case 'russia':
+        case 'middleEast':
           if(schengen.has(iso_a3)) {
             if(focused) { return highlightBlues(0); }
             if(builder) { return highlightBlues(0.7); }
             return highlightBlues(1);
           }
           break;
-        case 'russia':
-          if(soviet.includes(iso_a3)) {
-            if(focused) { return highlightBlues(0); }
-            if(builder) { return highlightBlues(0.7); }
-            return highlightBlues(1);
-          }
-          break;
-        case 'middleEast':
-          if(arabSpring.includes(iso_a3)) {
-            if(focused) { return highlightBlues(0); }
-            if(builder) { return highlightBlues(0.7); }
-            return highlightBlues(1);
-          }
+          // if(arabSpring.includes(iso_a3)) {
+          //   if(focused) { return highlightBlues(0); }
+          //   if(builder) { return highlightBlues(0.7); }
+          //   return highlightBlues(1);
+          // }
       }
       if(focused) { return blues(0) }
       if(builder) { return blues(0.7) }
