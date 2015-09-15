@@ -4,7 +4,6 @@ import InteractiveComponent from './interactive-component.js';
 
 class ColourGroup extends InteractiveComponent {
   render() {
-    console.log('colours', this.props.colours);
     var colourBlocks = this.props.colours.map((c) => {
       var style = {
         backgroundColor : c

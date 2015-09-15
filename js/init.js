@@ -16,6 +16,7 @@ import ToggleBar from './toggle-bar.js';
 import ChartContainer from './chart-container.js';
 import BordersTable from './borders-table.js';
 import ColourLegend from './colour-legend.js';
+import LineLegend from './line-legend.js';
 
 import D3Map from './d3map.js';
 
@@ -247,11 +248,27 @@ class Chart extends ChartContainer {
       ]
     };
 
+    var lineColours = {
+      colours : [
+        {
+          label : 'immigration',
+          colours : [colours.red[0]]
+        },{
+          label : 'security',
+          colours : [colours.aquamarine[0]]
+        },{
+          label : 'other',
+          colours : [colours.grey[4]]
+        }
+      ]
+    };
+
     return(
       <div className='chart-container'>
         <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
+        <LineLegend {...lineColours} />
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
       </div>
