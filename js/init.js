@@ -229,7 +229,7 @@ class Chart extends ChartContainer {
       label : 'Border fences',
       colours : [
         {
-          label : 'partially or fully constructed',
+          label : 'fully or partially constructed',
           colours : [colours.red[0]]
         },{
           label : 'planned',
@@ -240,7 +240,7 @@ class Chart extends ChartContainer {
 
     return(
       <div className='chart-container'>
-        <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
+        <Header title="Boundary walls and fences worldwide" subtitle="National borders containing one or more barriers in active use or in development"/>
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
         <LineLegend {...lineColours} />
@@ -352,10 +352,10 @@ function fetchTopojson(name, file, featureGroup) {
 
 window.interactive = interactive;
 
-fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries');
+fetchTopojson('countries', './data/countries.json', 'ne_50m_admin_0_countries_lakes');
 // fetchTopojson('coastline', './data/coastline.json', '50m_coastline');
 fetchTopojson('borders', './data/borders.json', 'ne_50m_admin_0_boundary_lines_land');
-fetchTopojson('fences', './data/fences.json', 'fences-out');
+fetchTopojson('fences', './data/fences.json', 'fences-revision-2');
 
 d3.csv('./data/walls-data.csv', function(error, data) {
   interactive.action('addData', 'fenceData', Im.fromJS(data));

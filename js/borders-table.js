@@ -54,7 +54,7 @@ export default class BordersTable extends InteractiveComponent {
         var text_item = fenceKeys.includes('TEXT') ?
           (<td>{d.get('TEXT')}</td>) : null;
         return (<tr>
-          <td>{countries[d.get('target')].name}</td>
+          <td>{d.get('target_name')}</td>
           {year_items}
           <td>{formatPurpose(d)}</td>
           {text_item}
