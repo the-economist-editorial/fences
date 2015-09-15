@@ -72,17 +72,17 @@ var highlightBlues = generateMonoScale(80, 40, 50, 80);
 
 var rawColours = Im.fromJS([
   {
-    label : 'Country',
+    label : 'Country:',
     colours : [
-      { colour : blues(0.7), label : 'has built walls' },
-      { colour : blues(1), label : 'has not built walls' }
+      { colour : blues(0.7), label : 'has built barriers' },
+      { colour : blues(1), label : 'has not built barriers' }
       // { colour : blues(0), label : 'selected' }
     ]
   }
 ]);
 var offColours = Im.fromJS([
-  { colour : highlightBlues(0.7), label : 'has built walls' },
-  { colour : highlightBlues(1), label : 'has not built walls' }
+  { colour : highlightBlues(0.7), label : 'has built barriers' },
+  { colour : highlightBlues(1), label : 'has not built barriers' }
   // { colour : highlightBlues(0), label : 'selected' }
 ]);
 function generateColourGroup(title) {
@@ -98,6 +98,7 @@ interactive.createStore('meta', {
     interactive.action('setProjection', projections[value]);
 
     if(key==='zoom') {
+      this.set('focusCountry', '');
       switch(value) {
         case 'world':
           this.set('country-colours', rawColours);
@@ -226,7 +227,7 @@ class Chart extends ChartContainer {
     };
 
     var lineColours = {
-      label : 'Border fences',
+      label : 'Borders with fenced sections:',
       colours : [
         {
           label : 'fully or partially constructed',
@@ -240,14 +241,14 @@ class Chart extends ChartContainer {
 
     return(
       <div className='chart-container'>
-        <Header title="Boundary walls and fences worldwide" subtitle="National borders containing one or more barriers in active use or in development"/>
+        <Header title="Boundary walls and fences worldwide" subtitle="National borders containing one or more barriers in active use or development"/>
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
         <LineLegend {...lineColours} />
-        <div className="instruction">Click a country to see the walls and fences it has built</div>
+        <div className="instruction">Click a country to see the barriers it has built</div>
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
-        <div className="source">Sources: Élisabeth Vallet</div>
+        <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, University of Quebec-¡Montreal; <em>The Economist</em></div>
       </div>
     );
   }

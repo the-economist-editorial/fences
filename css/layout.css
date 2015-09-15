@@ -1,6 +1,6 @@
 :root {
   --header-block-top-offset: 15px;
-  --header-block-left-offset : 16px;
+  --header-block-left-offset : 20px;
 }
 
 .chart-container {
