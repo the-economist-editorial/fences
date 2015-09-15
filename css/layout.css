@@ -55,4 +55,21 @@
     border-color: var(--red-1);
   }
 
+  .colour-legend {
+    margin: 10px;
+
+    .colour-group {
+      margin-right: 1em;
+      display: inline-block;
+    }
+    .colour-block {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+    }
+    .colour-block-label {
+      margin: 0 5px;
+      vertical-align: top;
+    }
+  }
 }

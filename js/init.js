@@ -15,6 +15,7 @@ import Header from './header.js';
 import ToggleBar from './toggle-bar.js';
 import ChartContainer from './chart-container.js';
 import BordersTable from './borders-table.js';
+import ColourLegend from './colour-legend.js';
 
 import D3Map from './d3map.js';
 
@@ -84,16 +85,56 @@ function generateMonoScale(h, c, startL, endL) {
 var blues = generateMonoScale(238, 8, 60, 90);
 var highlightBlues = generateMonoScale(210, 15, 50, 80);
 
+var rawColours = Im.fromJS([
+  {
+    label : 'Countries',
+    colours : [
+      blues(0),
+      blues(0.7),
+      blues(1)
+    ]
+  }
+]);
+var offColours = Im.fromJS([
+  highlightBlues(0),
+  highlightBlues(0.7),
+  highlightBlues(1)
+]);
+function generateColourGroup(title) {
+  return rawColours.push(Im.fromJS({
+    label : title,
+    colours : offColours
+  }));
+}
+
 interactive.createStore('meta', {
   setToggle : function(key, value) {
     this.set(`toggle-${key}`, value);
     interactive.action('setProjection', projections[value]);
+
+    if(key==='zoom') {
+      switch(value) {
+        case 'world':
+          this.set('country-colours', rawColours);
+          break;
+        case 'europe':
+          this.set('country-colours', generateColourGroup('Schengen area'));
+          break;
+        case 'russia':
+          this.set('country-colours', generateColourGroup('Former Soviet Union'));
+          break;
+        case 'middleEast':
+          this.set('country-colours', generateColourGroup('Recent instability'));
+          break;
+      }
+    }
   },
   setFocusCountry : function(iso_a3) {
     this.set('focusCountry', iso_a3);
   }
 }, {
-  'toggle-zoom' : 'world'
+  'toggle-zoom' : 'world',
+  'country-colours' : rawColours
 });
 
 interactive.createStore('geodata', {
@@ -140,6 +181,8 @@ interactive.createStore('data', {
     this.set(dataName, data);
     this.set(`${dataName}-builders`, data.map(d => d.get('builder')).toSet());
   }
+}, {
+  fenceData : Im.Map()
 });
 
 class Chart extends ChartContainer {
@@ -193,10 +236,22 @@ class Chart extends ChartContainer {
       ]
     };
 
+    var countryColours = {
+      name : 'country',
+      storeBindings : [
+        [interactive.stores['meta'], function(store) {
+          this.setState({
+            colours : store.get(`${this.props.name}-colours`)
+          });
+        }]
+      ]
+    };
+
     return(
       <div className='chart-container'>
         <Header title="Man the barricades" subtitle="Walls to stop migration, by date of construction"/>
         <ToggleBar {...toggleProps} />
+        <ColourLegend {...countryColours} />
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
       </div>
