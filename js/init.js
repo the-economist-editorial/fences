@@ -248,7 +248,7 @@ class Chart extends ChartContainer {
         <div className="instruction">Click a country to see the barriers it has built</div>
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
-        <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, University of Quebec-¡Montreal; <em>The Economist</em></div>
+        <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, University of Quebec-Montreal; <em>The Economist</em></div>
       </div>
     );
   }
@@ -285,6 +285,10 @@ interactive.action('setProjection', projections.world);
 interactive.action('setLayerAttrs', {
   'countries' : {
     'data-iso' : function(d) { return d.properties.iso_a3; },
+    'data-builtwall' : function(d) {
+      var builders = interactive.stores['data'].get('fenceData-builders');
+      return builders && builders.has(d.properties.iso_a3);
+    },
     'data-focus' : function(d) { return d.properties.iso_a3 === interactive.stores['meta'].get('focusCountry'); },
     fill : function(d) {
       var iso_a3 = d.properties.iso_a3;

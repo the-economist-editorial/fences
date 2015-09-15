@@ -1,8 +1,10 @@
 /* project-specific CSS belongs here */
 
-/*.countries {
-  fill : #e3e3e3;
-}*/
+.countries {
+  &[data-builtwall=true] {
+    cursor: pointer;
+  }
+}
 
 /*[data-status='europe'] {
   [data-iso=FRA], [data-iso=DEU], [data-iso=NLD], [data-iso=BEL],
