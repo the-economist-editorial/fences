@@ -5,7 +5,7 @@ import InteractiveComponent from './interactive-component.js'
 import countries from './countries.js';
 import interactive from './interactive.js';
 
-var core_purposes = Im.OrderedSet(['immigration', 'security', 'trafficking', 'smuggling', 'border']);
+var core_purposes = Im.OrderedSet(['immigration', 'security', 'trafficking', 'smuggling', 'territorial']);
 function formatPurpose(d) {
   return core_purposes.map((p) => {
     // console.log(p, d.get(`${p}_yes`));

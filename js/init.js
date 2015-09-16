@@ -248,7 +248,7 @@ class Chart extends ChartContainer {
         <div className="instruction">Click a country to see the barriers it has built</div>
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
-        <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, University of Quebec-Montreal; <em>The Economist</em></div>
+        <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, Raoul-Dandurand Chair, University of Quebec in Montreal; <em>The Economist</em></div>
       </div>
     );
   }
