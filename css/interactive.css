@@ -88,6 +88,10 @@
       text-align: left;
     }
 
+    tr {
+      height: 21px;
+    }
+
     tr:nth-child(2n) {
       background-color: var(--red-3);
     }

@@ -66,6 +66,10 @@ export default class BordersTable extends InteractiveComponent {
         </tr>)
       });
 
+    while(fenceElements.size < 10) {
+      fenceElements = fenceElements.push(<tr></tr>);
+    }
+
     var yearHeaderItems = [];
     if(fenceKeys.includes('announced_year')) {
       yearHeaderItems.push(<th className='announced'>Announced</th>);
