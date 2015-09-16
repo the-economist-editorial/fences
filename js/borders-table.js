@@ -32,7 +32,12 @@ export default class BordersTable extends InteractiveComponent {
     var country = countries[this.state.focusCountry];
 
     var fences = interactive.stores['data'].get('fenceData')
-      .filter(d => d.get('builder') === this.state.focusCountry);
+      .filter(d => d.get('builder') === this.state.focusCountry)
+      .sort((a, b) => {
+        var aVal = +a.get('begun_year') + a.get('announced_year') * 10;
+        var bVal = +b.get('begun_year') + b.get('announced_year') * 10;
+        return bVal < aVal;
+      });
 
     var fenceKeys = fences.reduce((memo, value) => {
       var neededKeys = Im.Set(value.filter(v => !!v).keys()).intersect(importantKeys).toJS();
