@@ -230,7 +230,7 @@ class Chart extends ChartContainer {
       label : 'Borders with fenced sections:',
       colours : [
         {
-          label : 'fully or partially constructed',
+          label : 'completed or under construction',
           colours : [colours.red[0]]
         },{
           label : 'planned',
@@ -241,7 +241,7 @@ class Chart extends ChartContainer {
 
     return(
       <div className='chart-container'>
-        <Header title="Boundary walls and fences worldwide" subtitle="National borders containing one or more barriers in active use or development"/>
+        <Header title="Boundary walls and fences worldwide" subtitle="National borders partially or fully fenced-off*"/>
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
         <LineLegend {...lineColours} />
@@ -249,6 +249,7 @@ class Chart extends ChartContainer {
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
         <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, Raoul-Dandurand Chair, University of Quebec in Montreal; <em>The Economist</em></div>
+        <div className="note">*Barriers in active use or development. Borders shown do not reflect precise length or location of barriers.</div>
       </div>
     );
   }
