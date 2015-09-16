@@ -245,7 +245,6 @@ class Chart extends ChartContainer {
         <ToggleBar {...toggleProps} />
         <ColourLegend {...countryColours} />
         <LineLegend {...lineColours} />
-        <div className="instruction">Click a country to see the barriers it has built</div>
         <D3Map {...mapProps} />
         <BordersTable {...tableProps} />
         <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, Raoul-Dandurand Chair, University of Quebec in Montreal; <em>The Economist</em></div>
@@ -295,7 +294,8 @@ interactive.action('setLayerAttrs', {
       var iso_a3 = d.properties.iso_a3;
       var zoomMode = interactive.stores['meta'].get('toggle-zoom');
       var focused = iso_a3 === interactive.stores['meta'].get('focusCountry');
-      var builder = interactive.stores['data'].get('fenceData-builders').has(iso_a3);
+      var builders = interactive.stores['data'].get('fenceData-builders');
+      var builder = builders && builders.has(iso_a3);
 
       switch(zoomMode) {
         case 'europe':

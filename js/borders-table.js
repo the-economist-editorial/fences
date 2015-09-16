@@ -17,6 +17,10 @@ var importantKeys = Im.Set([
   'target', 'announced_year', 'begun_year', 'completed_year', 'TEXT'
 ]);
 
+var emptyRows = Array.apply(null, Array(10)).map(()=>{
+  return (<tr><td></td></tr>);
+});
+
 export default class BordersTable extends InteractiveComponent {
   constructor() {
     super(...arguments);
@@ -26,7 +30,13 @@ export default class BordersTable extends InteractiveComponent {
   }
   render() {
     if(!this.state.focusCountry || this.state.focusCountry === 'NONE') {
-      return (<div className='border-table-container'></div>);
+      return (<div className='border-table-container'>
+        <div className='instruction'><em>Click a country to see the barriers it has built</em></div>
+        <table className='border-table'>
+          <thead><tr><td></td></tr></thead>
+          <tbody>{emptyRows}</tbody>
+        </table>
+      </div>);
     }
 
     var country = countries[this.state.focusCountry];
@@ -67,7 +77,8 @@ export default class BordersTable extends InteractiveComponent {
       });
 
     while(fenceElements.size < 10) {
-      fenceElements = fenceElements.push(<tr></tr>);
+      // just a lot here...
+      fenceElements = fenceElements.push(<tr><td colSpan='10'></td></tr>);
     }
 
     var yearHeaderItems = [];

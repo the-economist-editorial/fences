@@ -1,3 +1,8 @@
+:root {
+  --table-base-red : color(var(--red-4) saturation(-10%) lightness(80%));
+  --table-alt-red : var(--red-4);
+}
+
 /* project-specific CSS belongs here */
 
 .countries {
@@ -69,14 +74,24 @@
 }
 
 .border-table-container {
+  h1, .instruction {
+    margin: 0 2px;
+    min-height : 26px;
+    line-height: 26px;
+  }
+
   h1 {
     font-size: 20px;
-    margin: 0 2px;
   }
   min-height: 260px;
 
+  .dummy-table {
+    background-color: var(--table-base-red);
+    min-height: 232px;
+  }
+
   .border-table {
-    background-color: var(--red-4);
+    background-color: var(--table-base-red);
 
     width: 100%;
     font-size: 14px;
@@ -92,8 +107,8 @@
       height: 21px;
     }
 
-    tr:nth-child(2n) {
-      background-color: var(--red-3);
+    tr:nth-child(2n), thead tr {
+      background-color: var(--table-alt-red);
     }
   }
 }
