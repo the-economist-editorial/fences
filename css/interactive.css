@@ -113,6 +113,11 @@
   }
 }
 
+super {
+  font-size: 12px;
+  vertical-align: super;
+}
+
 .source {
   background-color: var(--grey-10);
 }

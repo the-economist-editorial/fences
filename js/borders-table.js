@@ -93,8 +93,11 @@ export default class BordersTable extends InteractiveComponent {
     }
     var textHeaderItem = fenceKeys.includes('TEXT') ?
       (<th>Notes</th>) : null;
+
+    var countryName = [country.name];
+    if(country.name === 'Brazil') { countryName.push(<super>†</super>) }
     return(<div className='border-table-container'>
-      <h1>{country.name}</h1>
+      <h1>{countryName}</h1>
       <table className='border-table'>
         <thead>
         <tr>

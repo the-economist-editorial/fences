@@ -249,6 +249,7 @@ class Chart extends ChartContainer {
         <BordersTable {...tableProps} />
         <div className="source">Sources: Élisabeth Vallet, Josselyn Guillarmou, and Zoé Barry, Raoul-Dandurand Chair, University of Quebec in Montreal; <em>The Economist</em></div>
         <div className="note">*Barriers in active use or development. Borders shown do not reflect precise length or location of barriers.</div>
+        <div className="note"><super>†</super>The majority of Brazil’s proposed barrier comprises a non-physical “virtual” wall, monitored by drones and satellites.</div>
       </div>
     );
   }
